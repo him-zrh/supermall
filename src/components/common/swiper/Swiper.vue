@@ -50,7 +50,7 @@
 
         // 2.开启定时器
         this.startTimer();
-      }, 100)
+      }, 300)
     },
     methods: {
 		  /**
@@ -79,6 +79,7 @@
 
         // 2.判断滚动到的位置
         this.checkPosition();
+
 
         // 4.滚动完成
         this.scrolling = false
