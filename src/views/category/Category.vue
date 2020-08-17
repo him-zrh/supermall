@@ -1,142 +1,148 @@
 <template>
-  <div class="wrapper" ref="aaa">
-    <ul class="content">
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>10</li>
-      <li>11</li>
-      <li>12</li>
-      <li>13</li>
-      <li>14</li>
-      <li>15</li>
-      <li>16</li>
-      <li>17</li>
-      <li>18</li>
-      <li>19</li>
-      <li>20</li>
-      <li>21</li>
-      <li>22</li>
-      <li>23</li>
-      <li>24</li>
-      <li>25</li>
-      <li>26</li>
-      <li>27</li>
-      <li>28</li>
-      <li>29</li>
-      <li>30</li>
-      <li>31</li>
-      <li>32</li>
-      <li>33</li>
-      <li>34</li>
-      <li>35</li>
-      <li>36</li>
-      <li>37</li>
-      <li>38</li>
-      <li>39</li>
-      <li>40</li>
-      <li>41</li>
-      <li>42</li>
-      <li>43</li>
-      <li>44</li>
-      <li>45</li>
-      <li>46</li>
-      <li>47</li>
-      <li>48</li>
-      <li>49</li>
-      <li>50</li>
-      <li>51</li>
-      <li>52</li>
-      <li>53</li>
-      <li>54</li>
-      <li>55</li>
-      <li>56</li>
-      <li>57</li>
-      <li>58</li>
-      <li>59</li>
-      <li>60</li>
-      <li>61</li>
-      <li>62</li>
-      <li>63</li>
-      <li>64</li>
-      <li>65</li>
-      <li>66</li>
-      <li>67</li>
-      <li>68</li>
-      <li>69</li>
-      <li>70</li>
-      <li>71</li>
-      <li>72</li>
-      <li>73</li>
-      <li>74</li>
-      <li>75</li>
-      <li>76</li>
-      <li>77</li>
-      <li>78</li>
-      <li>79</li>
-      <li>80</li>
-      <li>81</li>
-      <li>82</li>
-      <li>83</li>
-      <li>84</li>
-      <li>85</li>
-      <li>86</li>
-      <li>87</li>
-      <li>88</li>
-      <li>89</li>
-      <li>90</li>
-      <li>91</li>
-      <li>92</li>
-      <li>93</li>
-      <li>94</li>
-      <li>95</li>
-      <li>96</li>
-      <li>97</li>
-      <li>98</li>
-      <li>99</li>
-      <li>100</li>
-    </ul>
+  <div id="category">
+    <nav-bar class="nav-bar">
+      <div slot="center">商品分类</div>
+    </nav-bar>
+    <div class="content">
+      <tab-menu :categories="categories" @selectItem="selectItem"></tab-menu>
+
+      <scroll class="Scroll" :data="[categoryDate]">
+        <div>
+          <tab-content-category :subcategories="showSubcategory"></tab-content-category>
+          <tab-control :titles="['综合', '新品', '销量']" ></tab-control>
+          <!-- <tab-content-detail :category-detail="showCategoryDetail"></tab-content-detail> -->
+        </div>
+      </scroll>
+    </div>
   </div>
 </template>
 
 <script>
-import BScroll from 'better-scroll'
+import TabMenu from "./childComp/TabMenu.vue";
+import TabContentCategory from "./childComp/TabContentCategory.vue";
+// import TabContentDetail from "./childComp/TabContentDetail.vue";
+
+import NavBar from "components/common/navbar/NavBar.vue";
+import Scroll from "components/common/scroll/Scroll.vue";
+import TabControl from "components/content/tabControl/TabControl.vue";
+
+import {getCategory, getSubcategory, getCategoryDetail} from "network/category";
+// import {POP, SELL, NEW} from "common/const";
+// import {tabControlMixin} from "common/mixin";
 
 export default {
-    name: 'Category',
-    data() {
-      return {
-        scroll: null
-      }
+  name: "Category",
+  components: {
+    TabMenu,
+    TabContentCategory,
+    // TabContentDetail,
+    NavBar,
+    Scroll,
+    TabControl,
+  },
+  // mixins: [tabControlMixin],
+  data() {
+    return {
+      categories: [],
+      categoryDate: {},
+      currentIndex: -1
+    };
+  },
+  created() {
+    // 请求分类数据
+    this._getCategory();
+  },
+  computed: {
+    showSubcategory() {
+      if (this.currentIndex === -1) return {};
+      return this.categoryDate[this.currentIndex].subcategories;
     },
-    //组件创建完后调用
-    mounted() {
-      this.scroll = new BScroll(document.querySelector('.wrapper'), {
-        probeType: 3,
-        pullUpLoad: true
-      })
-
-      this.scroll.on('scroll', (position) => {
-        console.log(position);
-      })
-
-      this.scroll.on('pullingUp', () => {
-        console.log('上拉加载更多');
-      })
-    }
-}
+    // showCategoryDetail() {
+    //   if (this.currentIndex === -1) return [];
+    //   return this.categoryDate[this.currentIndex].categoryDetail[this.currentType]
+    // },
+  },
+  methods: {
+    _getCategory() {
+      getCategory().then((res) => {
+        // 获取分类数据
+        this.categories = res.data.category.list;
+        // 初始化每一个类别的子数据
+        for (let i = 0; i < this.categories.length; i++) {
+          this.categoryDate[i] = {
+            subcategories: {},
+            // categoryDetail: {
+            //     'pop': [],
+            //     'new': [],
+            //     'sell': []
+            // }
+          };
+        }
+        // 请求第一个分类的数据
+        this._getSubcategories(0);
+      });
+    },
+    _getSubcategories(index) {
+      this.currentIndex = index;
+      const mailKey = this.categories[index].maitKey;
+      getSubcategory(mailKey).then((res) => {
+        this.categoryDate[index].subcategories = res.data;
+        this.categoryDate = { ...this.categoryDate };
+        // this._getCategoryDetail(POP);
+        // this._getCategoryDetail(SELL);
+        // this._getCategoryDetail(NEW);
+      });
+    },
+    _getCategoryDetail(type) {
+      // 获取请求的miniWallkey
+      const miniWallkey = this.categories[this.currentIndex].miniWallkey;
+      // 发送请求，传入miniWallkey和type
+      getCategoryDetail(miniWallkey, type).then((res) => {
+        // 将获取的数据报存下来
+        this.categoryData[this.currentIndex].categoryDetail[type] = res;
+        this.categoryData = { ...this.categoryData };
+      });
+    },
+    selectItem(index) {
+      this._getSubcategories(index);
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .wrapper {
-    height: 200px;
-    background-color: red;
-    overflow: hidden;
-  }
+#category {
+  height: 100vh;
+}
+
+.nav-bar {
+  background-color: var(--color-tint);
+  font-weight: 700;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.content {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  left: 0;
+  bottom: 49px;
+  display: flex;
+  overflow: hidden;
+}
+
+.Scroll {
+  /* position: relative; */
+  /* width: 275px; */
+  /* top: 44px; */
+  /* bottom: 49px; */
+  /* right: 0; */
+  /* overflow: hidden; */
+  height: 100%;
+  flex: 1;
+}
 </style>

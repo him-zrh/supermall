@@ -1,7 +1,7 @@
 <template>
-  <swiper>
+  <swiper class="swiper-s">
     <swiper-item v-for="item in banners" :key="item.id">
-      <a :href="item.link">
+      <a>
         <img :src="item.image" alt @load="imageLoad"/>
       </a>
     </swiper-item>
@@ -40,5 +40,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped> 
+.swiper-s {
+  touch-action: none;
+}
 </style>
