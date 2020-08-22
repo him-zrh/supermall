@@ -44,10 +44,13 @@ export default {
 
     .info-title {
         color: #222;
+        line-height: 25px;
+        padding: 5px 5px 0;
     }
 
-    .info-prcie {
-        margin-top: 10px;
+    .info-price {
+        /* margin-top: 5px; */
+        padding-left: 5px;
     }
 
     .info-price .n-price {
@@ -75,8 +78,9 @@ export default {
     }
 
     .info-other {
-        margin-top: 15px;
-        line-height: 30px;
+        margin-top: 10px;
+        /* line-height: 30px; */
+        padding: 0 5px;
         display: flex;
         font-size: 13px;
         border-bottom: 1px solid rgba(100, 100, 100, .1);
@@ -88,6 +92,7 @@ export default {
         justify-content: space-between;
         line-height: 60px;
         border-bottom: 5px solid #f2f5f8;
+        padding: 0 5px;
     }
 
     .info-service-item img {

@@ -29,8 +29,8 @@ export default {
   width: 100%;
   text-align: center;
   font-size: 12px;
-  padding: 10px 0 30px;
-  border-bottom: 10px solid #eee;
+  padding: 10px 0 15px;
+  border-bottom: 8px solid #eee;
   touch-action: none;
 }
 
@@ -41,5 +41,6 @@ export default {
 .recommend-item img {
   width: 68px;
   height: 68px;
+  margin-bottom: 7px;
 }
 </style>

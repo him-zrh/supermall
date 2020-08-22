@@ -2,7 +2,7 @@
   <div class="tab-control">
     <div
       v-for="(item, index) in titles"
-      :key="(item.id, index.id)"
+      :key="index"
       class="tab-control-item"
       :class="{active: index === currentIndex}"
       @click="itemClick(index)"

@@ -22,7 +22,7 @@ export default {
     },
     itemSpace: {
       type: Number,
-      default: 8,
+      default: 11,
     },
     lineSpace: {
       type: Number,

@@ -6,10 +6,11 @@
     <div class="content">
       <tab-menu :categories="categories" @selectItem="selectItem"></tab-menu>
 
-      <scroll class="Scroll" :data="[categoryDate]">
+      <scroll class="Scroll" :data="[categoryData]">
         <div>
           <tab-content-category :subcategories="showSubcategory"></tab-content-category>
           <tab-control :titles="['综合', '新品', '销量']" ></tab-control>
+          <!-- @tabClick="tabClick" -->
           <!-- <tab-content-detail :category-detail="showCategoryDetail"></tab-content-detail> -->
         </div>
       </scroll>
@@ -44,8 +45,9 @@ export default {
   data() {
     return {
       categories: [],
-      categoryDate: {},
-      currentIndex: -1
+      categoryData: {},
+      currentIndex: -1,
+      // currentType: "pop"
     };
   },
   created() {
@@ -55,21 +57,33 @@ export default {
   computed: {
     showSubcategory() {
       if (this.currentIndex === -1) return {};
-      return this.categoryDate[this.currentIndex].subcategories;
+      return this.categoryData[this.currentIndex].subcategories;
     },
     // showCategoryDetail() {
     //   if (this.currentIndex === -1) return [];
-    //   return this.categoryDate[this.currentIndex].categoryDetail[this.currentType]
+    //   return this.categoryData[this.currentIndex].categoryDetail[this.currentType]
     // },
   },
   methods: {
+    // tabClick(index) {
+    //   switch (index) {
+    //     case 0:
+    //       this.currentType = "pop";
+    //       break;
+    //     case 1:
+    //       this.currentType = "new";
+    //       break;
+    //     case 2:
+    //       this.currentType = "sell";
+    //   }
+    // },
     _getCategory() {
       getCategory().then((res) => {
         // 获取分类数据
         this.categories = res.data.category.list;
         // 初始化每一个类别的子数据
         for (let i = 0; i < this.categories.length; i++) {
-          this.categoryDate[i] = {
+          this.categoryData[i] = {
             subcategories: {},
             // categoryDetail: {
             //     'pop': [],
@@ -86,11 +100,11 @@ export default {
       this.currentIndex = index;
       const mailKey = this.categories[index].maitKey;
       getSubcategory(mailKey).then((res) => {
-        this.categoryDate[index].subcategories = res.data;
-        this.categoryDate = { ...this.categoryDate };
-        // this._getCategoryDetail(POP);
-        // this._getCategoryDetail(SELL);
-        // this._getCategoryDetail(NEW);
+        this.categoryData[index].subcategories = res.data;
+        this.categoryData = { ...this.categoryData };
+        // this._getCategoryDetail('pop');
+        // this._getCategoryDetail('sell');
+        // this._getCategoryDetail('new');
       });
     },
     _getCategoryDetail(type) {

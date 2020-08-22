@@ -67,6 +67,7 @@ export default {
 
   .info-desc {
     padding: 0 15px;
+    line-height: 1.5;
   }
 
   .info-desc .start, .info-desc .end {

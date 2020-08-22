@@ -1,7 +1,7 @@
 <template>
   <grid-view :cols="3" :lineSpace="15" :v-margin="20" v-if="subcategories.list">
     <div class="item" v-for="(item, index) in subcategories.list" :key="index">
-      <a href="#">
+      <a>
         <img :src="item.image" class="item-img" alt />
         <div class="item-text">{{item.title}}</div>
       </a>
@@ -21,7 +21,7 @@ export default {
     subcategories: {
       type: Object,
       default() {
-        return {};
+        return [];
       },
     },
   },

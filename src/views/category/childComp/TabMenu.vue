@@ -24,6 +24,9 @@ export default {
   },
   props: {
     categories: Array,
+    default() {
+      return []
+    }
   },
   data() {
     return {
